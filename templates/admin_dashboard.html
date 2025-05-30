@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<style>
+  :root {
+    /* متغيرات لضبط أحجام الخطوط - تم زيادتها */
+    --font-base: 6.5rem;       /* الحجم الأساسي للنص */
+    --header-font: 6.5rem;     /* حجم خط العناوين الرئيسية */
+    --card-title: 6.5rem;      /* حجم عنوان البطاقات */
+    --card-text: 6.5rem;       /* حجم النص داخل البطاقات */
+    --list-item: 6.5rem;       /* حجم نص عناصر القائمة */
+  }
+  
+  /* فئات مخصصة لتطبيق أحجام الخطوط */
+  .custom-header-title {
+    font-size: var(--header-font);
+    font-weight: bold;
+  }
+  .custom-card-title {
+    font-size: var(--card-title);
+    font-weight: bold;
+  }
+  .custom-text {
+    font-size: var(--card-text);
+  }
+  .custom-list-item {
+    font-size: var(--list-item);
+  }
+  
+  /* تحسين تصميم هيدر البطاقة (لوحة التحكم) */
+  .card-header.header-section {
+    background: linear-gradient(135deg, #007bff, #00aaff);
+    color: #fff;
+    padding: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, filter 0.3s ease;
+  }
+  .card-header.header-section:hover {
+    transform: scale(1.03);
+    filter: brightness(1.05);
+  }
+  .card-header.header-section .security-icon {
+    font-size: 1.75rem; /* يمكنك زيادة حجم الأيقونة إذا رغبت */
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card shadow-sm">
+      <!-- هيدر بطاقة لوحة التحكم المُحسّن -->
+      <div class="card-header header-section d-flex align-items-center justify-content-center">
+        <i class="fas fa-user-shield security-icon me-2"></i>
+        <span class="custom-header-title">لوحة التحكم للمسؤول الأمني</span>
+      </div>
+      
+      <div class="card-body">
+        <p class="text-center mb-4 custom-text">إدارة قائمة الموظفين المسموح لهم بالدخول</p>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        
+        <form method="POST" action="/add" class="mb-4">
+          <div class="input-group">
+            <input type="text" name="name" class="form-control custom-text" placeholder="اسم الموظف الجديد" required>
+            <button class="btn btn-primary custom-text" type="submit">
+              <i class="fas fa-plus me-1"></i> إضافة
+            </button>
+          </div>
+        </form>
+        
+        <h4 class="mb-3 custom-card-title">قائمة الموظفين المسموح لهم بالدخول</h4>
+        {% if employees %}
+          <div class="list-group">
+            {% for employee in employees %}
+              <div class="list-group-item d-flex justify-content-between align-items-center custom-list-item">
+                <div>
+                  <i class="fas fa-user me-2"></i>
+                  <span class="fw-bold">{{ employee[1] }}</span>
+                </div>
+                <a href="/delete/{{ employee[0] }}" class="btn btn-sm btn-danger">
+                  <i class="fas fa-trash-alt"></i> حذف
+                </a>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="alert alert-info text-center">
+            <i class="fas fa-info-circle me-2"></i> لا يوجد موظفين في القائمة
+          </div>
+        {% endif %}
+        
+        <div class="mt-4 text-center">
+          <a href="/gate" class="btn btn-outline-light">
+            <i class="fas fa-door-open me-2"></i> الانتقال إلى بوابة الدخول
+          </a>
+        </div>
+      </div>
+    </div>
+    <!-- نهاية بطاقة لوحة التحكم -->
+  </div>
+</div>
+{% endblock %}

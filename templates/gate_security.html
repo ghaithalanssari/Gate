@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<style>
+  :root {
+    /* متغيرات لضبط حجم الخطوط بسهولة - تم تقليل القيم الخاصة بالنصوص داخل الكارد */
+    --font-base: 1.1rem;            /* حجم الخط الأساسي */
+    --header-font: 1.75rem;         /* حجم خط الهيدر */
+    --card-title: 0.5rem;           /* حجم عنوان البطاقات (تم تقليله من 1.5rem) */
+    --card-text: 0.5rem;              /* حجم النص داخل البطاقات (تم تقليله من 1.2rem) */
+    --list-item: 1rem;              /* حجم النص لعناصر القائمة (تم تقليله من 1.1rem) */
+  }
+  
+  /* فئات مخصصة للتحكم بحجم الخط */
+  .custom-header-title {
+    font-size: var(--header-font);
+    font-weight: bold;
+  }
+  .custom-card-title {
+    font-size: var(--card-title);
+    font-weight: bold;
+  }
+  .custom-text {
+    font-size: var(--card-text);
+  }
+  .custom-list-item {
+    font-size: var(--list-item);
+  }
+  
+  /* تحسين تصميم الهيدر */
+  .header-section {
+    background: linear-gradient(135deg, #007bff, #00aaff);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease-in-out, filter 0.3s;
+    padding: 1rem 0;
+  }
+  .header-section:hover {
+    transform: scale(1.03);
+    filter: brightness(1.05);
+  }
+  .animate-header {
+    animation: headerAnimation 2s infinite alternate;
+  }
+  @keyframes headerAnimation {
+    0% { text-shadow: 1px 1px 3px rgba(0,0,0,0.2); }
+    100% { text-shadow: 3px 3px 6px rgba(0,0,0,0.4); }
+  }
+  
+  /* تحسين تصميم بطاقة تعليمات الاستخدام */
+  .instructions-card {
+    border: none;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+  .instructions-card-header {
+    background: linear-gradient(45deg, #007bff, #00aaff);
+    color: #fff;
+    border-bottom: none;
+    padding: 0.75rem 1.25rem;
+  }
+  .instructions-card .list-group-item {
+    border: none;
+    border-top: 1px solid #f0f0f0;
+  }
+  .instructions-card .list-group-item:first-child {
+    border-top: none;
+  }
+</style>
+{% endblock %}
+
+{% block header %}
+<header class="header-section text-white text-center">
+  <div class="container">
+    <h1 class="m-0 custom-header-title animate-header">بوابة أمن الدولة</h1>
+  </div>
+</header>
+{% endblock %}
+
+{% block content %}
+<div class="container my-3">
+  <div class="row justify-content-center">
+    <div class="col-md-10 col-lg-6 col-xl-5">
+      <!-- بطاقة الدخول الرئيسية -->
+      <div class="card p-2 shadow-sm">
+        <div class="card-body">
+          <div class="text-center mb-2">
+            <i class="fas fa-door-open fs-2 text-primary"></i>
+            <h2 class="mt-2 custom-card-title">بوابة الدخول - فرع أمن الدولة</h2>
+            <p class="mb-2 custom-text">أدخل اسم الموظف للتحقق من صلاحيته للدخول</p>
+          </div>
+          <form method="POST" action="/search">
+            <div class="input-group mb-2">
+              <input type="text" name="name" class="form-control custom-text" placeholder="اسم الموظف" required autofocus>
+              <button class="btn btn-primary custom-text" type="submit">
+                <i class="fas fa-search me-1"></i> تحقق
+              </button>
+            </div>
+          </form>
+          <div class="text-center mt-2">
+            <p class="mb-1 custom-text">للمسؤولين الأمنيين فقط:</p>
+            <a href="/admin/login" class="btn btn-outline-secondary custom-text">
+              <i class="fas fa-lock me-1"></i> تسجيل دخول المسؤول
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- بطاقة تعليمات الاستخدام المحسنة -->
+      <div class="card mt-3 shadow-sm instructions-card">
+        <div class="card-header d-flex align-items-center instructions-card-header">
+          <i class="fas fa-info-circle me-2"></i>
+          <span class="custom-card-title m-0">تعليمات الاستخدام</span>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item custom-list-item">
+            <i class="fas fa-check-circle text-success me-2"></i>
+            أدخل الاسم الكامل للموظف أو جزء منه
+          </li>
+          <li class="list-group-item custom-list-item">
+            <i class="fas fa-check-circle text-success me-2"></i>
+            النتيجة ستظهر فوراً بعد الضغط على "تحقق"
+          </li>
+          <li class="list-group-item custom-list-item">
+            <i class="fas fa-check-circle text-success me-2"></i>
+            اللون الأخضر يعني دخول مسموح، والأحمر يعني مرفوض
+          </li>
+          <li class="list-group-item custom-list-item">
+            <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+            إذا لم يظهر الاسم، اتصل بالمسؤول الأمني
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<footer class="bg-dark text-white text-center py-2">
+  <div class="container">
+    <small>© 2025 جميع الحقوق محفوظة</small>
+  </div>
+</footer>
+{% endblock %}
